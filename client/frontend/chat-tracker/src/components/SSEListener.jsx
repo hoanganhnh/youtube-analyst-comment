@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 import VideoMessage from "./VideoMessage";
 import { useViewer } from "../contexts/ViewerContext";
@@ -58,7 +57,7 @@ const SSEListener = () => {
   // }, []);
 
   useEffect(() => {
-    const eventSource = new EventSource("http://localhost:5001/stream");
+    const eventSource = new EventSource("http://localhost:3000/stream");
     eventSource.addEventListener("message", (event) => {
       const rawData = event.data;
       // const validJSONData = rawData.replace(/'/g, '"').replace(/True/g, 'true');

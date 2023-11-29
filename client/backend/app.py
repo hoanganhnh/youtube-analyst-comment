@@ -47,10 +47,10 @@ async def read_stream():
 
 
 
-# @app.get("/stream")
-# async def stream_changes(request:Request):
+@app.get("/stream")
+async def stream_changes(request:Request):
     
-#     return EventSourceResponse(read_stream())
+    return EventSourceResponse(read_stream())
 
 
 @app.get("/video/{video_id}")
