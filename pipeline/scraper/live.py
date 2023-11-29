@@ -203,7 +203,7 @@ class LiveTracker:
 
 @app.command()
 # def run(url:Annotated[Optional[str], typer.Argument(envvar="VIDEO_URL")]=None,headless:bool=True):
-def run(url:Optional[str]="https://www.youtube.com/watch?v=8BrZ5H8G63E",headless:bool=True):
+def run(url:Optional[str]="https://www.youtube.com/watch?v=UHkg8kdfnu0",headless:bool=True):
     track=LiveTracker(link=url,headless=headless)
     track.track()
 

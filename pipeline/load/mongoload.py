@@ -45,7 +45,7 @@ class MongoLoader:
         self.consumer=KafkaConsumer(consume_topic,bootstrap_servers=self.server)
         logger.info(f'Started Kafka Consumer on topic :{consume_topic}')
 
-    def recieve_upstream(self):
+    def receive_upstream(self):
         for message in self.consumer:
             raw_message=message.value
             yield raw_message
@@ -62,7 +62,7 @@ class MongoLoader:
     def __start_session(self):
         self.init_db()
         self.__start_consumer()
-        for message in self.recieve_upstream():
+        for message in self.receive_upstream():
             json_message=orjson.loads(message)
             message_type=json_message['info_type']
             if message_type=='VIDEO_STATIC_INFO':

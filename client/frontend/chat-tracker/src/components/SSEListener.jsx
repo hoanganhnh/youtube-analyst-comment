@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
+
 import VideoMessage from "./VideoMessage";
 import { useViewer } from "../contexts/ViewerContext";
 
@@ -10,10 +12,54 @@ const SSEListener = () => {
 
   const { setViewerCount, setIsLive, video, setVideo } = useViewer();
 
-  useEffect(() => {
-    const eventSource = new EventSource("http://localhost:3000/stream");
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await fetchEventSource(`http://localhost:5001/stream`, {
+  //       method: "GET",
+  //       headers: {
+  //         Accept: "text/event-stream",
+  //         "Content-Type": "application/json",
+  //       },
+  //       onopen(res) {
+  //         if (res.ok && res.status === 200) {
+  //           console.log("Connection made ", res.body);
+  //         }
+  //       },
+  //       onmessage(event) {
+  //         const rawData = event.data;
+  //         console.log(rawData);
+  //         const validJSONData = rawData
+  //           .replace(/'/g, '"')
+  //           .replace(/True/g, "true")
+  //           .replace(/False/g, "false");
+  //         const eventData = JSON.parse(validJSONData);
+  //         if (video == null) {
+  //           setVideo(eventData.video_id);
+  //         }
+  //         setViewerCount(eventData?.viewers_count);
+  //         setIsLive(eventSource?.is_live);
 
-    eventSource.onmessage = (event) => {
+  //         setMessages((prevMessages) => {
+  //           const newMessages = [...prevMessages, eventData].slice(
+  //             -MAX_MESSAGES
+  //           );
+  //           return newMessages;
+  //         });
+  //       },
+  //       onclose() {
+  //         console.log("Connection closed by the server");
+  //       },
+  //       onerror(err) {
+  //         console.log("There was an error from server", err);
+  //       },
+  //     });
+  //   };
+  //   fetchData();
+  // }, []);
+
+  useEffect(() => {
+    const eventSource = new EventSource("http://localhost:5001/stream");
+    eventSource.addEventListener("message", (event) => {
       const rawData = event.data;
       // const validJSONData = rawData.replace(/'/g, '"').replace(/True/g, 'true');
       const validJSONData = rawData
@@ -21,6 +67,7 @@ const SSEListener = () => {
         .replace(/True/g, "true")
         .replace(/False/g, "false");
       const eventData = JSON.parse(validJSONData);
+      console.log(eventData);
       if (video == null) {
         // setVideo(`https://www.youtube.com/watch?v=${eventData.video_id}`)
         setVideo(eventData.video_id);
@@ -38,7 +85,7 @@ const SSEListener = () => {
         const newMessages = [...prevMessages, eventData].slice(-MAX_MESSAGES);
         return newMessages;
       });
-    };
+    });
 
     eventSource.onerror = (error) => {
       console.error("SSE Error:", error);

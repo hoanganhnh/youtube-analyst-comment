@@ -29,28 +29,28 @@ print('Connecting to MongoDB:',settings.MONGO_URL)
 client = MongoClient(settings.MONGO_URL)
 db = client.main
 message_collection = db.live
-info_collection=db.info 
+info_collection = db.info 
 
 
 async def read_stream():
     change_stream = message_collection.watch()
     while True:
         for change in change_stream:
-            if change['operationType']=='insert':
-                doc=change['fullDocument']
-                doc.pop('_id')
-                response={"data":doc,"event":"message"}
-                yield response
+            print(change['fullDocument'])
+            doc=change['fullDocument']
+            doc.pop('_id')
+            response={"data":doc,"event":"message"}
+            yield response
             
 
 
 
 
 
-@app.get("/stream")
-async def stream_changes(request:Request):
+# @app.get("/stream")
+# async def stream_changes(request:Request):
     
-    return EventSourceResponse(read_stream())
+#     return EventSourceResponse(read_stream())
 
 
 @app.get("/video/{video_id}")
