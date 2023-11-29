@@ -7,6 +7,10 @@ import orjson
 import os
 from playwright.sync_api import sync_playwright
 
+from flask import Flask
+
+app = Flask(__name__)
+
 import settings
 from models import VideoStaticInfo,VideoLiveMessage
 
@@ -145,5 +149,16 @@ def run(url:Optional[str]="https://www.youtube.com/watch?v=n9Du-oESxCg",headless
     print(youtube.session_video_info)
 
 
+@app.route("/", methods=['GET'])
+def hello():
+    return "<p>Hello, Scraper!</p>"
+
+@app.route("/scraper/<url>", methods=['GET'])
+def handle_scraper(url):
+    run("https://www.youtube.com/watch?v=" + url)
+    return url
+
+# todo: update send url youtube with server
+# app.run(debug=True, port=5002)
 if __name__=='__main__':
     run()
