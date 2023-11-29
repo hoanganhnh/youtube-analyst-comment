@@ -1,7 +1,9 @@
-from dotenv import load_dotenv
-load_dotenv('/home/hoanganh/Workspaces/python/ptit/Youtube-LiveChat-Analysis/pipeline/scraper/main.env')
 import os
+from dotenv import load_dotenv
 from pprint import pprint
+
+path_env = os.path.join(os.path.dirname(__file__), 'main.env')
+load_dotenv(path_env)
 
 
 VIDEO_URL= os.getenv('VIDEO_URL')
