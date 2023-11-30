@@ -7,7 +7,7 @@ import orjson
 from datetime import datetime,timedelta
 from playwright.sync_api import sync_playwright
 from models import VideoStaticInfo,VideoLiveMessage
-from kafka import KafkaProducer
+from kafka import KafkaProducer, KafkaConsumer
 import typer
 
 
@@ -203,11 +203,17 @@ class LiveTracker:
 
 @app.command()
 # def run(url:Annotated[Optional[str], typer.Argument(envvar="VIDEO_URL")]=None,headless:bool=True):
-def run(url:Optional[str]="https://www.youtube.com/watch?v=6fE_usyvSM4",headless:bool=True):
+def run(url:Optional[str],headless:bool=True):
     track=LiveTracker(link=url,headless=headless)
     track.track()
 
+def start_scraper():
+    consumer_url = KafkaConsumer('url',bootstrap_servers=settings.KAFKA_SERVER)
+    for consumer in consumer_url:
+        json_message=orjson.loads(consumer.value)
+        run(json_message)
 
 if __name__=='__main__':
-    app()
+    logger.info('Start scraper server')
+    start_scraper()
         

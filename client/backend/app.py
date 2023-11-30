@@ -43,10 +43,6 @@ async def read_stream():
             yield response
             
 
-
-
-
-
 @app.get("/stream")
 async def stream_changes(request:Request):
     
@@ -59,8 +55,6 @@ async def get_video(video_id: str):
     result = info_collection.find_one(filter)
     result.pop('_id')
     return result
-
-
 
 
 @app.on_event("shutdown")
