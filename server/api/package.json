@@ -22,7 +22,7 @@
         "google-auth-library": "^6.0.5",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.9.23",
-        "passport": "^0.4.1",
+        "passport": "^0.6.0",
         "passport-google-id-token": "^0.4.7",
         "passport-google-oauth2": "^0.2.0",
         "passport-jwt": "^4.0.0",
