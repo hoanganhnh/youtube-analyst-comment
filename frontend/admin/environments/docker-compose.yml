@@ -1,0 +1,54 @@
+version: "3.8"
+services:
+  nginx:
+    image: nginx
+    labels:
+      - traefik.enable=true
+
+      # HTTP traffic
+      - traefik.http.routers.nginx-${COMPOSE_PROJECT_NAME}.rule=Host(`${VIRTUAL_HOST}`)
+      - traefik.http.routers.nginx-${COMPOSE_PROJECT_NAME}.entrypoints=http
+
+      # HTTPS traffic
+      - traefik.http.routers.nginx-${COMPOSE_PROJECT_NAME}-https.rule=Host(`${VIRTUAL_HOST}`)
+      - traefik.http.routers.nginx-${COMPOSE_PROJECT_NAME}-https.entrypoints=https
+      - traefik.http.services.nginx-${COMPOSE_PROJECT_NAME}-https.loadbalancer.server.port=80
+
+      # Redirect all http requests to https
+      - traefik.http.routers.nginx-${COMPOSE_PROJECT_NAME}.middlewares=https-redirect@file
+    networks:
+      proxy:
+      internal:
+        aliases:
+          - ${VIRTUAL_HOST}
+    environment:
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+      VIRTUAL_HOST_FRONTEND: ${VIRTUAL_HOST}
+    volumes:
+      - ./nginx.conf:/etc/nginx/templates/default.conf.template
+      - ssl-certs:/etc/nginx/ssl
+    restart: unless-stopped
+    depends_on:
+      - node
+  node:
+    image: rogerdz/node:16
+    environment:
+      UID: ${UID}
+      GID: ${GID}
+    networks:
+      - internal
+    volumes:
+      - ${WORK_DIR}:/app:cached
+    working_dir: /app
+    tty: true
+    init: true
+    hostname: ${COMPOSE_PROJECT_NAME}-docker
+    restart: unless-stopped
+networks:
+  proxy:
+    external: true
+  internal:
+    driver: bridge
+volumes:
+  ssl-certs:
+    external: true
