@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import passport from "passport";
 
 import { Google } from "../lib/google";
 import { User, UserDocument } from "../models/User";
@@ -64,6 +65,50 @@ export const loginViaGoogle = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ message: "Error in logging in" });
   }
+};
+
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  passport.authenticate(
+    "login",
+    { session: false },
+    function (err, user, info) {
+      if (err) {
+        return next(err);
+      }
+
+      if (!user) {
+        return res.status(401).json({ message: info.message });
+      }
+
+      sendResponseToken({ user, res, statusCode: 200 });
+    }
+  )(req, res, next);
+};
+
+export const signUp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  passport.authenticate(
+    "signUp",
+    { session: false },
+    function (err, user, info) {
+      if (err) {
+        return next(err);
+      }
+
+      if (!user) {
+        return res.status(401).json({ message: info.message });
+      }
+
+      sendResponseToken({ user, res, statusCode: 201 });
+    }
+  )(req, res, next);
 };
 
 export const getMe = async (req: Request, res: Response) => {

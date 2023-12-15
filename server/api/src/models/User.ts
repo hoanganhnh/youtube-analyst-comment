@@ -1,7 +1,7 @@
 import { Schema, model, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
-import { Role } from "../types/Role";
+import { Role } from "../types";
 
 const { String } = Schema.Types;
 
@@ -12,6 +12,7 @@ export interface UserDocument extends Document {
   password?: string;
   role: Role;
   googleId?: string;
+  matchesPassword: (password: string) => Promise<boolean>;
 }
 
 const UserSchema = new Schema<UserDocument>(
