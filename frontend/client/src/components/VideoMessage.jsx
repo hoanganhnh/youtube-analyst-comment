@@ -18,6 +18,8 @@ function VideoMessage({ data }) {
     message_dt,
     message_content,
     inferred_sentiment,
+    author_photo_url,
+    author_channel_id,
   } = data;
 
   return (
@@ -31,13 +33,18 @@ function VideoMessage({ data }) {
       }  rounded-lg p-2 shadow-md my-1 text-gray-800 text-xs`}
     >
       <div className="flex justify-between space-x-2 items-center space-y-1">
-        <Avatar
-          className="flex"
-          name={message_author_name}
-          src="https://yt4.ggpht.com/rp4aBOmpqGfRzS_yYpuBxtX0V5MYxbwyoInXGAY1rcwjC_tdsHztylkxsAudCXxLmsYU_6p_=s32-c-k-c0x00ffffff-no-rj"
-          round
-          size="30"
-        />
+        <a
+          href={`https://www.youtube.com/channel/${author_channel_id}`}
+          target="_blank"
+        >
+          <Avatar
+            className="flex"
+            name={message_author_name}
+            src={author_photo_url}
+            round
+            size="30"
+          />
+        </a>
         <div className="flex flex-1 gap-2 flex-wrap">
           <span className="text-gray-600">
             {formatDateToLocalTime(message_dt)}
