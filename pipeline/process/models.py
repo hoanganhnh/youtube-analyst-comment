@@ -44,14 +44,16 @@ class VideoStaticInfo(BaseDataClass):
 @dataclass
 class VideoLiveMessage(BaseDataClass):
     video_id:str
-    viewers_count:int=field(repr=False)
-    is_live:bool=field(repr=False)
+    # viewers_count:int=field(repr=False)
+    # is_live:bool=field(repr=False)
     message_time_usec:int=field(repr=False)
     message_dt:datetime=field(repr=False)
     message_author_name:str
     message_content:str
+    author_photo_url:str
+    author_channel_id:str
     inferred_sentiment:Optional[str]=''
-    has_profanity:Optional[bool]=False
+    # has_profanity:Optional[bool]=False
     timestamp:float=datetime.utcnow().timestamp()
     info_type:str=InfoType.VIDEO_LIVE_MESSAGE
 

@@ -37,7 +37,7 @@ class MongoLoader:
         except Exception as e:
             logger.exception(e,stack_info=True)
             exit(1)
-        db=self.client.main
+        db=self.client.ptit
         self.db=db
 
     def __start_consumer(self):

@@ -1,15 +1,15 @@
-from fastapi import FastAPI,Request
+from fastapi import FastAPI,Request, HTTPException
 from pymongo import MongoClient
 import settings
 import uvicorn
 from sse_starlette.sse import EventSourceResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 app = FastAPI()
 
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
     "http://localhost",
     "http://localhost:8080",
     "*",
@@ -34,7 +34,7 @@ info_collection = db.info
 
 async def read_stream():
     change_stream = message_collection.watch()
-    while True:
+    while change_stream:
         for change in change_stream:
             print(change['fullDocument'])
             doc=change['fullDocument']
@@ -45,8 +45,18 @@ async def read_stream():
 
 @app.get("/stream")
 async def stream_changes(request:Request):
-    
-    return EventSourceResponse(read_stream())
+    if "text/event-stream" not in request.headers.get("accept", "").lower():
+        raise HTTPException(status_code=406, detail="Only accepts text/event-stream")
+
+    # Set response headers for SSE
+    headers = {
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Content-Type": "text/event-stream",
+        "Transfer-Encoding": "chunked",
+    }
+
+    return EventSourceResponse(read_stream(), headers=headers)
 
 
 @app.get("/video/{video_id}")
