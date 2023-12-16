@@ -146,6 +146,7 @@ class LiveTracker:
                         message=' '.join([txt.get('text') or self.__handle_get_emoji(txt) for txt  in liveChatData.get('message').get('runs')])
                         author=liveChatData.get('authorName').get('simpleText')
                         author_photo_url = liveChatData.get('authorPhoto').get('thumbnails')[0].get('url')
+                        author_channel_id = liveChatData.get('authorExternalChannelId')
                         timestampUsec=liveChatData.get('timestampUsec')
                         timestamp=int(timestampUsec)
                         cleanchat=VideoLiveMessage(
@@ -153,7 +154,8 @@ class LiveTracker:
                             message_author_name=author,
                             message_content=message,
                             video_id=self.session_video_info.video_id,
-                            author_photo_url=author_photo_url
+                            author_photo_url=author_photo_url,
+                            author_channel_id=author_channel_id
                             )
                         yield cleanchat
                 if 'updated_metadata' in url:
