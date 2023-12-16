@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import "event-source-polyfill";
 
 import App from "./App";
+import { AuthenticateProvider } from "./contexts/AuthContext";
 import { ViewerProvider } from "./contexts/ViewerContext";
 
 import "./index.css";
@@ -12,9 +13,11 @@ import "./index.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ViewerProvider>
-        <App />
-      </ViewerProvider>
+      <AuthenticateProvider>
+        <ViewerProvider>
+          <App />
+        </ViewerProvider>
+      </AuthenticateProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

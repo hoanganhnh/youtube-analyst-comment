@@ -1,13 +1,31 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useUser } from "../contexts/AuthContext";
 
 const SignUpPage = () => {
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const { setUser } = useUser();
+  const navigate = useNavigate();
+
   const handleLogin = () => {
-    console.log("Signup in with:", { email, password });
+    axios
+      .post("http://127.0.0.1:5000/api/auth/signup", {
+        email,
+        password,
+        username,
+      })
+      .then((res) => {
+        setUser(res.data.user);
+        navigate("/");
+      })
+      .catch(() => {
+        console.log("Error sign up");
+      });
   };
 
   return (

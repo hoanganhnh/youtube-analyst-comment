@@ -36,7 +36,7 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
-        const { name } = req.body;
+        const { username } = req.body;
 
         let user = await User.findOne({ email: email.toLowerCase() });
 
@@ -46,7 +46,7 @@ passport.use(
         user = await User.create({
           email,
           password,
-          name,
+          username,
           role: Role.User,
         });
         //Send the user information to the next middleware

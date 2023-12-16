@@ -1,12 +1,29 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import { useUser } from "../contexts/AuthContext";
 
 const LoginPage = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const { setUser } = useUser();
+  const navigate = useNavigate();
+
   const handleLogin = () => {
-    console.log("Logging in with:", { email, password });
+    axios
+      .post("http://127.0.0.1:5000/api/auth/login", {
+        email,
+        password,
+      })
+      .then((res) => {
+        setUser(res.data.user);
+        navigate("/");
+      })
+      .catch((e) => {
+        console.log("error login", e);
+      });
   };
 
   return (

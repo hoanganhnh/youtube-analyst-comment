@@ -7,4 +7,6 @@
 port = 5000
 # stream server
 port = 3000
+# admin clien
+port = 3002
 ```
