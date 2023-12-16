@@ -145,6 +145,7 @@ class LiveTracker:
                             break
                         message=' '.join([txt.get('text') or self.__handle_get_emoji(txt) for txt  in liveChatData.get('message').get('runs')])
                         author=liveChatData.get('authorName').get('simpleText')
+                        author_photo_url = liveChatData.get('authorPhoto').get('thumbnails')[0].get('url')
                         timestampUsec=liveChatData.get('timestampUsec')
                         timestamp=int(timestampUsec)
                         cleanchat=VideoLiveMessage(
@@ -152,8 +153,7 @@ class LiveTracker:
                             message_author_name=author,
                             message_content=message,
                             video_id=self.session_video_info.video_id,
-                            viewers_count=self.live_view_count,
-                            is_live=self.is_live
+                            author_photo_url=author_photo_url
                             )
                         yield cleanchat
                 if 'updated_metadata' in url:
@@ -177,28 +177,28 @@ class LiveTracker:
                 
 
     def track(self):
-                try:
-                    self.__start_session()
-                    if self.browser==None or self.page==None :
-                        raise PlaywrightExecutionError(f'Unable to get browser ,Got:{self.browser}')
-                    #Referenced URL for Code: https://stackoverflow.com/questions/47456631/simpler-way-to-run-a-generator-function-without-caring-about-items
-                    # deque(self.__start_livechat_track(),maxlen=1)
-                    send_topic=settings.RAW_TOPIC
-                    # self.page.screenshot(path='/screenshots')
-                    for live_chat_message in self.__start_livechat_track():
-                        message=live_chat_message.to_json()
-                        # print(message)
-                        logger.info(f'Sent Message: {live_chat_message}')
-                        # print(live_chat_message)
-                        self.producer.send(send_topic,message)
-                        self.producer.flush(1)
-                    self.__end_session()
-                except NotLiveVideoError as e:
-                    print(f'The provided video is not a live video:{e}')
-                    logger.error('Video Link provided is not a live video',stack_info=True)
-                except PlaywrightExecutionError:
-                    print(f'Something went wrong with playwright:{e}')
-                    logger.error('Something went wrong with Playwright',stack_info=True)
+        try:
+            self.__start_session()
+            if self.browser==None or self.page==None :
+                raise PlaywrightExecutionError(f'Unable to get browser ,Got:{self.browser}')
+            #Referenced URL for Code: https://stackoverflow.com/questions/47456631/simpler-way-to-run-a-generator-function-without-caring-about-items
+            # deque(self.__start_livechat_track(),maxlen=1)
+            send_topic=settings.RAW_TOPIC
+            # self.page.screenshot(path='/screenshots')
+            for live_chat_message in self.__start_livechat_track():
+                message=live_chat_message.to_json()
+                # print(message)
+                logger.info(f'Sent Message: {live_chat_message}')
+                # print(live_chat_message)
+                self.producer.send(send_topic,message)
+                self.producer.flush(1)
+            self.__end_session()
+        except NotLiveVideoError as e:
+            print(f'The provided video is not a live video:{e}')
+            logger.error('Video Link provided is not a live video',stack_info=True)
+        except PlaywrightExecutionError:
+            print(f'Something went wrong with playwright:{e}')
+            logger.error('Something went wrong with Playwright',stack_info=True)
             
 
 @app.command()
