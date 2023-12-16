@@ -6,6 +6,7 @@ import LoginPage from "./pages/Login";
 import HistoryPage from "./pages/History";
 import VideoLiveStreamPage from "./pages/VideoLiveStream";
 import VideoStatic from "./pages/VideoStatic";
+import SignUpPage from "./pages/SignUp";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Route path="/live-stream" element={<VideoLiveStreamPage />} />
       <Route path="/history" element={<HistoryPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
     </Routes>
   );
 };

@@ -1,18 +1,33 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-const LoginPage = () => {
+const SignUpPage = () => {
+  const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   const handleLogin = () => {
-    console.log("Logging in with:", { email, password });
+    console.log("Signup in with:", { email, password });
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-6">Login</h1>
+        <h1 className="text-2xl font-bold mb-6">Sign Up</h1>
+        <div className="mb-4">
+          <label htmlFor="username" className="text-gray-600 block mb-2">
+            username
+          </label>
+          <input
+            required
+            type="text"
+            id="username"
+            className="w-full border border-gray-300 rounded px-3 py-2"
+            placeholder="Enter your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
         <div className="mb-4">
           <label htmlFor="email" className="text-gray-600 block mb-2">
             email
@@ -46,11 +61,11 @@ const LoginPage = () => {
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             onClick={handleLogin}
           >
-            Login
+            Sign Up
           </button>
 
-          <Link to="/signup" className="ml-4 hover:underline">
-            Sign up
+          <Link to="/login" className="ml-4 hover:underline">
+            Login
           </Link>
         </div>
       </div>
@@ -58,4 +73,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

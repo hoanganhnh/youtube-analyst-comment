@@ -1,11 +1,12 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
+import ReactPlayer from "react-player";
+import Avatar from "react-avatar";
+
 import SSEListener from "../components/SSEListener";
 import { useViewer } from "../contexts/ViewerContext";
-import ReactPlayer from "react-player";
-import axios from "axios";
-import Avatar from "react-avatar";
 import Header from "../components/Header";
+import InputSearchLiveStreamYoutube from "../components/InputSearchLiveStreamYoutube";
 
 const VideoLiveStreamPage = () => {
   const { viewerCount, isLive, video, videoDetails, setVideoDetails } =
@@ -24,6 +25,9 @@ const VideoLiveStreamPage = () => {
   return (
     <div className="w-full flex flex-col p-3 bg-gray-800 text-gray-200 h-screen">
       <Header />
+      <div className="mt-6">
+        <InputSearchLiveStreamYoutube />
+      </div>
       <div className="flex flex-col lg:flex-row w-full h-screen overflow-y-scroll justify-around gap-1 space-x-4 px-10 py-10">
         {video ? (
           <>

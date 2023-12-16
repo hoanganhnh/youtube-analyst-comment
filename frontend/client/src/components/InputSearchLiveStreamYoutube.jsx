@@ -1,7 +1,7 @@
 import * as React from "react";
 import axios from "axios";
 
-const InputSearchYoutube = () => {
+const InputSearchLiveStreamYoutube = () => {
   const [url, setUrl] = React.useState("");
 
   const handleSearchLiveStreamVideo = () => {
@@ -9,9 +9,8 @@ const InputSearchYoutube = () => {
       console.log("require url youtube");
       return;
     }
-    // @TODO
     axios
-      .post("http://127.0.0.1:5002/scraper/static-video", {
+      .post("http://127.0.0.1:5002/scraper", {
         url,
       })
       .then(() => {
@@ -23,7 +22,7 @@ const InputSearchYoutube = () => {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center flex-grow">
       <input
         type="text"
         placeholder="Search"
@@ -53,4 +52,4 @@ const InputSearchYoutube = () => {
   );
 };
 
-export default InputSearchYoutube;
+export default InputSearchLiveStreamYoutube;
