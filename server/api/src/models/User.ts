@@ -6,7 +6,7 @@ import { Role } from "../types";
 const { String } = Schema.Types;
 
 export interface UserDocument extends Document {
-  name: string;
+  username: string;
   email: string;
   imageURL?: string;
   password?: string;
@@ -17,7 +17,7 @@ export interface UserDocument extends Document {
 
 const UserSchema = new Schema<UserDocument>(
   {
-    name: String,
+    username: String,
     email: String,
     imageURL: String,
     password: String,

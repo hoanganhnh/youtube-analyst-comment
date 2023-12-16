@@ -7,7 +7,7 @@ import axios from "axios";
 import Avatar from "react-avatar";
 import Header from "../components/Header";
 
-const Track = () => {
+const VideoLiveStreamPage = () => {
   const { viewerCount, isLive, video, videoDetails, setVideoDetails } =
     useViewer();
 
@@ -23,9 +23,7 @@ const Track = () => {
 
   return (
     <div className="w-full flex flex-col p-3 bg-gray-800 text-gray-200 h-screen">
-      <div className="flex justify-center items-center py-4 px-10 gap-6">
-        <Header />
-      </div>
+      <Header />
       <div className="flex flex-col lg:flex-row w-full h-screen overflow-y-scroll justify-around gap-1 space-x-4 px-10 py-10">
         {video ? (
           <>
@@ -81,18 +79,10 @@ const Track = () => {
           <div className="w-full overflow-y-auto h-full overflow-hidden">
             <SSEListener />
           </div>
-          <div className="p-2">
-            <input
-              type="text"
-              disabled
-              className="w-full px-2 p-1 rounded appearance-none focus:appearance-none outline-none bg-transparent border border-gray-400/50"
-              placeholder="Unable to send message from this interface"
-            />
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Track;
+export default VideoLiveStreamPage;

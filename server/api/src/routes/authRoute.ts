@@ -14,8 +14,6 @@ authRouter
   .post(loginValidation(), validate, authController.login);
 authRouter.route("/google").post(authController.loginViaGoogle);
 
-authRouter.use(protect);
-
 authRouter.route("/me").get(authController.getMe);
 
 export { authRouter as authRoutes };

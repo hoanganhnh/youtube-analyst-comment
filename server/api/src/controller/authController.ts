@@ -27,7 +27,7 @@ export const sendResponseToken = ({
   // remove password from response
   user.password = undefined;
 
-  res.status(statusCode).json({ data: { user, token }, success: true });
+  res.status(statusCode).json({ user, token, success: true });
 };
 
 export const loginViaGoogle = async (req: Request, res: Response) => {
