@@ -3,7 +3,7 @@ require("dotenv").config();
 import express from "express";
 import cors from "cors";
 import { connectDb } from "./database";
-import { authRoutes } from "./routes";
+import { authRoutes, historyRoutes } from "./routes";
 import { PORT } from "./config";
 import passport from "passport";
 import bodyParser from "body-parser";
@@ -29,6 +29,7 @@ const start = async () => {
   });
 
   app.use("/api/auth", authRoutes);
+  app.use("/api/history", historyRoutes);
 
   app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`);
