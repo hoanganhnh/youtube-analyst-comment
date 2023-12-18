@@ -79,9 +79,9 @@ class Analyser:
         message_obj=VideoLiveMessage(**json_message)
 
         if self.enable_sentiment:
-            message_obj.inferred_sentiment=self.get_sentiment(message_obj.message_content)
+            message_obj.type_comment=self.get_sentiment(message_obj.message_content)
         else:
-            message_obj.inferred_sentiment=SentimentType.NEUTRAL
+            message_obj.type_comment=SentimentType.NEUTRAL
 
         if self.enable_profanity:
             #TODO: Profanity Check and Censor

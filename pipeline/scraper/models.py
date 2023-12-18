@@ -52,7 +52,7 @@ class VideoLiveMessage(BaseDataClass):
     message_content:str
     author_photo_url:str
     author_channel_id:str
-    inferred_sentiment:Optional[str]=''
+    type_comment:Optional[str]=''
     # has_profanity:Optional[bool]=False
     timestamp:float=datetime.utcnow().timestamp()
     info_type:str=InfoType.VIDEO_LIVE_MESSAGE

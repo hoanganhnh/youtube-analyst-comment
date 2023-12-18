@@ -17,7 +17,7 @@ function VideoMessage({ data }) {
     message_author_name,
     message_dt,
     message_content,
-    inferred_sentiment,
+    type_comment,
     author_photo_url,
     author_channel_id,
   } = data;
@@ -25,9 +25,9 @@ function VideoMessage({ data }) {
   return (
     <div
       className={`${
-        inferred_sentiment === "NEG"
+        type_comment === "NEG"
           ? "bg-red-200"
-          : inferred_sentiment === "POS"
+          : type_comment === "POS"
           ? "bg-green-200"
           : "bg-blue-200"
       }  rounded-lg p-2 shadow-md my-1 text-gray-800 text-xs`}
