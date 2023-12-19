@@ -33,7 +33,7 @@ const SSEListener = () => {
       // });
 
       setMessages((prevMessages) => {
-        const newMessages = [...prevMessages, eventData].slice(-MAX_MESSAGES);
+        const newMessages = [...prevMessages, eventData];
         return newMessages;
       });
     };

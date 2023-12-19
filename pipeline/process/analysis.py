@@ -1,6 +1,6 @@
 import settings
 from models import VideoLiveMessage,SentimentType
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+# from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from kafka import KafkaProducer
 from kafka import KafkaConsumer
 from pprint import pprint
@@ -8,6 +8,9 @@ import orjson
 import logging
 import sys
 import typer
+
+from handle_predict import predict
+
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s',
                     handlers=[
@@ -38,15 +41,15 @@ class Analyser:
         self.producer=KafkaProducer(bootstrap_servers=self.server)
         logger.info(f'Started Producer to produce on topic: {self.produce_topic}')
 
-    def __start_analyzers(self):
-        if self.enable_sentiment:
-            self.sentiment=SentimentIntensityAnalyzer()
+    # def __start_analyzers(self):
+    #     if self.enable_sentiment:
+    #         self.sentiment=SentimentIntensityAnalyzer()
         
 
     def __start_session(self):
         self.__start_consumer()
         self.__start_producer()
-        self.__start_analyzers()
+        # self.__start_analyzers()
         # self.profnaity=ProfanityFilter()
         while True:
             for message in self.recieve_upstream():
@@ -60,13 +63,14 @@ class Analyser:
             yield raw_message
 
     def get_sentiment(self,message:str):
-        sentiment_dict=self.sentiment.polarity_scores(message)
-        if sentiment_dict['compound'] >= 0.05 :
-            return SentimentType.POSITIVE
-        elif sentiment_dict['compound'] <= - 0.05 :
-            return SentimentType.NEGATIVE
-        else :
-            return SentimentType.NEUTRAL
+        # sentiment_dict=self.sentiment.polarity_scores(message)
+        # if sentiment_dict['compound'] >= 0.05 :
+        #     return SentimentType.POSITIVE
+        # elif sentiment_dict['compound'] <= - 0.05 :
+        #     return SentimentType.NEGATIVE
+        # else :
+        #     return SentimentType.NEUTRAL
+        return predict(message)
 
 
 
@@ -79,9 +83,9 @@ class Analyser:
         message_obj=VideoLiveMessage(**json_message)
 
         if self.enable_sentiment:
-            message_obj.inferred_sentiment=self.get_sentiment(message_obj.message_content)
+            message_obj.type_comment=self.get_sentiment(message_obj.message_content)
         else:
-            message_obj.inferred_sentiment=SentimentType.NEUTRAL
+            message_obj.type_comment=SentimentType.NEUTRAL
 
         if self.enable_profanity:
             #TODO: Profanity Check and Censor
