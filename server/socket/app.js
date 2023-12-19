@@ -34,9 +34,12 @@ async function run() {
 
 run().catch(console.dir);
 
-const collection = client.db("ptit").collection("lives");
-const changeStream = collection.watch(pipeline);
-changeStream.on("change", (change) => {
+const db = client.db("ptit")
+
+const liveCollection = db.collection("lives");
+const liveCollectionChangeStream = liveCollection.watch(pipeline);
+
+liveCollectionChangeStream.on("change", (change) => {
   switch (change.operationType) {
     case "insert":
       const data = change["fullDocument"];
