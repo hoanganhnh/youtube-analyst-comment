@@ -1,18 +1,8 @@
-// VideoMessage.js
-import React from "react";
+import * as React from "react";
 import Avatar from "react-avatar";
+import { formatDateToLocalTime } from "../utils/time";
 
 function VideoMessage({ data }) {
-  function formatDateToLocalTime(dateString) {
-    const dateObject = new Date(dateString);
-    const options = {
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    const localTime = dateObject.toLocaleTimeString(undefined, options);
-    return `${localTime}`;
-  }
-
   const {
     message_author_name,
     message_dt,

@@ -28,8 +28,8 @@ print('Connecting to MongoDB:',settings.MONGO_URL)
 
 client = MongoClient(settings.MONGO_URL)
 db = client.ptit
-message_collection = db.lives
-info_collection = db.infos 
+message_collection = db.comments
+info_collection = db.videos 
 
 
 async def read_stream():

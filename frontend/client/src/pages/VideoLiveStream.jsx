@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import * as React from "react";
 import axios from "axios";
 import ReactPlayer from "react-player";
 import Avatar from "react-avatar";
@@ -9,8 +9,7 @@ import Header from "../components/Header";
 import InputSearchLiveStreamYoutube from "../components/InputSearchLiveStreamYoutube";
 
 const VideoLiveStreamPage = () => {
-  const { viewerCount, isLive, video, videoDetails } =
-    useViewer();
+  const { video, videoDetails } = useViewer();
 
   // useEffect(() => {
   //   axios.get(`http://localhost:3000/video/${video}`).then((resp) => {
@@ -69,13 +68,8 @@ const VideoLiveStreamPage = () => {
           <div className="flex justify-between p-2 shadow-md">
             <span>Chats</span>
             <div className="flex gap-2 items-center">
-              <span
-                className={`${
-                  !isLive ? "bg-green-400" : "bg-red-400"
-                } rounded-full h-2 w-2`}
-              ></span>
+              <span className={`bg-green-400 rounded-full h-2 w-2`}></span>
               <h2 className="text-sm text-emerald-200 space-x-2">
-                <span className="font-bold">{viewerCount}</span>
                 <span>Watching</span>
               </h2>
             </div>

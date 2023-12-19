@@ -8,4 +8,8 @@ historyRouter.route("/").get(historyController.getAllHistory);
 
 historyRouter.route("/create").post(historyController.createHistory);
 
+historyRouter
+  .route("/find-by-user-id")
+  .post(historyController.findHistoryByUserId);
+
 export { historyRouter as historyRoutes };

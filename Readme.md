@@ -5,6 +5,8 @@
 ```sh
 # api auth
 port = 5000
+# web socket
+port = 5001
 # api web scrapper
 port = 5002
 # stream server

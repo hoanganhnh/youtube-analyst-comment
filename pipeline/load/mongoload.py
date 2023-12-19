@@ -65,9 +65,9 @@ class MongoLoader:
             json_message=orjson.loads(message)
             message_type=json_message['info_type']
             if message_type=='VIDEO_STATIC_INFO':
-                self.push_to_db(json_message,'infos')
+                self.push_to_db(json_message,'videos')
             if message_type=='VIDEO_LIVE_MESSAGE':
-                self.push_to_db(json_message,'lives')
+                self.push_to_db(json_message,'comments')
         
     def load(self):
         try:

@@ -2,7 +2,7 @@ import { Schema, model, Document } from "mongoose";
 
 export interface HistoryDocument extends Document {
   userId: string;
-  videoId: string;
+  video_id: string;
 }
 
 const HistorySchema = new Schema<HistoryDocument>(
@@ -11,9 +11,8 @@ const HistorySchema = new Schema<HistoryDocument>(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    videoId: {
-      type: Schema.Types.ObjectId,
-      ref: "Video",
+    video_id: {
+      type: Schema.Types.String,
     },
   },
   {
@@ -21,4 +20,4 @@ const HistorySchema = new Schema<HistoryDocument>(
   }
 );
 
-export const History = model<HistoryDocument>("History", HistorySchema);
+export const historyModel = model<HistoryDocument>("History", HistorySchema);

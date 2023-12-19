@@ -3,11 +3,15 @@ import axios from "axios";
 
 import { useViewer } from "../contexts/ViewerContext";
 import { youtubeParser } from "../utils/getIdVideoYoutube";
+import { useUser } from "../contexts/AuthContext";
+import { createHistory } from "../utils/history";
 
 const InputSearchLiveStreamYoutube = () => {
   const [url, setUrl] = React.useState("");
 
-  const { setVideo } = useViewer();
+  const { user } = useUser();
+
+  const { setVideo, setVideoDetails } = useViewer();
 
   const handleSearchLiveStreamVideo = () => {
     if (!url) {
@@ -20,7 +24,17 @@ const InputSearchLiveStreamYoutube = () => {
       })
       .then(() => {
         console.log("send url video stream successful");
-        setVideo(youtubeParser(url));
+        const videoId = youtubeParser(url);
+        setVideo(videoId);
+        createHistory({ userId: user._id, videoId });
+
+        axios
+          .post("http://127.0.0.1:5000/api/video/find-info-by-video-id", {
+            videoId,
+          })
+          .then((res) => {
+            setVideoDetails(res.data);
+          });
       })
       .catch(() => {
         console.error("error send url video stream");
