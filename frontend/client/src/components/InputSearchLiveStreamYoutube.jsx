@@ -1,8 +1,13 @@
 import * as React from "react";
 import axios from "axios";
 
+import { useViewer } from "../contexts/ViewerContext";
+import { youtubeParser } from "../utils/getIdVideoYoutube";
+
 const InputSearchLiveStreamYoutube = () => {
   const [url, setUrl] = React.useState("");
+
+  const { setVideo } = useViewer();
 
   const handleSearchLiveStreamVideo = () => {
     if (!url) {
@@ -10,14 +15,18 @@ const InputSearchLiveStreamYoutube = () => {
       return;
     }
     axios
-      .post("http://127.0.0.1:5002/scraper", {
+      .post("http://127.0.0.1:5002/api/scraper", {
         url,
       })
       .then(() => {
         console.log("send url video stream successful");
+        setVideo(youtubeParser(url));
       })
       .catch(() => {
         console.error("error send url video stream");
+      })
+      .finally(() => {
+        setUrl("");
       });
   };
 
@@ -26,6 +35,7 @@ const InputSearchLiveStreamYoutube = () => {
       <input
         type="text"
         placeholder="Search"
+        value={url}
         onChange={(e) => setUrl(e.target.value)}
         className=" text-gray-800 border rounded-l-xl border-gray-400 h-8  px-4 py-4 focus:outline-none focus:border-blue-600 w-3/5"
       />

@@ -1,8 +1,12 @@
 from flask import Flask, jsonify, request, abort, json as jsonFlask
+from flask_cors import CORS, cross_origin
 import settings
 from kafka import KafkaProducer
 import json
 import logging
+
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +28,8 @@ producer = start_producer()
 def resource_not_found(e):
     return jsonify(error=str(e)), 400
 
-@app.route("/scraper", methods=['POST'])
+@app.route("/api/scraper", methods=['POST'])
+@cross_origin() 
 def handle_scraper():
     data = jsonFlask.loads(request.data.decode(encoding='UTF-8'))
     url = data['url']

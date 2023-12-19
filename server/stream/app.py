@@ -27,9 +27,9 @@ app.add_middleware(
 print('Connecting to MongoDB:',settings.MONGO_URL)
 
 client = MongoClient(settings.MONGO_URL)
-db = client.main
-message_collection = db.live
-info_collection = db.info 
+db = client.ptit
+message_collection = db.lives
+info_collection = db.infos 
 
 
 async def read_stream():

@@ -9,18 +9,18 @@ import Header from "../components/Header";
 import InputSearchLiveStreamYoutube from "../components/InputSearchLiveStreamYoutube";
 
 const VideoLiveStreamPage = () => {
-  const { viewerCount, isLive, video, videoDetails, setVideoDetails } =
+  const { viewerCount, isLive, video, videoDetails } =
     useViewer();
 
-  useEffect(() => {
-    axios.get(`http://localhost:3000/video/${video}`).then((resp) => {
-      const data = resp.data;
-      setVideoDetails(data);
-    });
-    return () => {
-      setVideoDetails({});
-    };
-  }, [video]);
+  // useEffect(() => {
+  //   axios.get(`http://localhost:3000/video/${video}`).then((resp) => {
+  //     const data = resp.data;
+  //     setVideoDetails(data);
+  //   });
+  //   return () => {
+  //     setVideoDetails({});
+  //   };
+  // }, [video]);
 
   return (
     <div className="w-full flex flex-col p-3 bg-gray-800 text-gray-200 h-screen">

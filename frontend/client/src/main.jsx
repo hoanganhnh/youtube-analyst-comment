@@ -11,7 +11,7 @@ import { ViewerProvider } from "./contexts/ViewerContext";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <>
     <BrowserRouter>
       <AuthenticateProvider>
         <ViewerProvider>
@@ -19,5 +19,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </ViewerProvider>
       </AuthenticateProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </>
 );
