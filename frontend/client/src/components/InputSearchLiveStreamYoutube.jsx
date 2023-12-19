@@ -1,8 +1,13 @@
 import * as React from "react";
 import axios from "axios";
 
+import { useViewer } from "../contexts/ViewerContext";
+import { youtubeParser } from "../utils/getIdVideoYoutube";
+
 const InputSearchLiveStreamYoutube = () => {
   const [url, setUrl] = React.useState("");
+
+  const { setVideo } = useViewer();
 
   const handleSearchLiveStreamVideo = () => {
     if (!url) {
@@ -15,11 +20,13 @@ const InputSearchLiveStreamYoutube = () => {
       })
       .then(() => {
         console.log("send url video stream successful");
+        setVideo(youtubeParser(url));
       })
       .catch(() => {
         console.error("error send url video stream");
-      }).finally(() => {
-        setUrl("")
+      })
+      .finally(() => {
+        setUrl("");
       });
   };
 

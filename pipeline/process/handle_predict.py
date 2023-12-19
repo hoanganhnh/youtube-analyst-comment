@@ -19,7 +19,7 @@ def predict(message_content: str):
     pred = model.predict(ds_comment)
     hsd_dt = pred.argmax(-1)
 
-    result = "NEV"
+    result = "NEG"
     if int(hsd_dt[0]) == 0:
         result = "POS"
 

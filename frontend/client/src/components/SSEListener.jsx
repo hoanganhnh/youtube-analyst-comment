@@ -1,63 +1,40 @@
 import React, { useEffect, useState, useRef } from "react";
+import { io } from 'socket.io-client';
 
 import VideoMessage from "./VideoMessage";
-import { useViewer } from "../contexts/ViewerContext";
 
-const MAX_MESSAGES = 150; // Maximum number of messages to display
+const socket = io('http://localhost:5001/api/socket');
 
 const SSEListener = () => {
+
+  const [isConnected, setIsConnected] = useState(socket.connected);
+
   const [messages, setMessages] = useState([]);
   const messagesContainerRef = useRef(null);
 
-  const { setViewerCount, setIsLive, video, setVideo } = useViewer();
-
   useEffect(() => {
-    const handleStream = (event) => {
-      const rawData = event.data;
-      const validJSONData = rawData
-        .replace(/'/g, '"')
-        .replace(/True/g, "true")
-        .replace(/False/g, "false");
-      const eventData = JSON.parse(validJSONData);
-      console.log(eventData);
-      if (video == null) {
-        setVideo(eventData.video_id);
-      }
-      setViewerCount(eventData?.viewers_count);
-      setIsLive(eventSource?.is_live);
+    socket.on('connect', () => {
+      setIsConnected(socket.connected);
+    });
 
-      // Update messages array while maintaining the maximum limit
-      // setMessages((prevMessages) => {
-      //   const newMessages = [eventData, ...prevMessages].slice(0, MAX_MESSAGES);
-      //   return newMessages;
-      // });
-
+    socket.on('liveComment', (data) => {
+      console.log(data)
       setMessages((prevMessages) => {
-        const newMessages = [...prevMessages, eventData];
+        const newMessages = [data, ...prevMessages];
         return newMessages;
       });
-    };
-
-    const handleStreamError = (error) => {
-      console.error("SSE Error:", error);
-    };
-
-    const eventSource = new EventSource("http://localhost:3000/stream");
-
-    eventSource.addEventListener("message", handleStream);
-    eventSource.addEventListener("interval", handleStream);
-    eventSource.addEventListener("error", handleStreamError);
+    });
 
     return () => {
-      eventSource.close();
-      eventSource.removeEventListener("message", handleStream);
-      eventSource.removeEventListener("interval", handleStream);
-      eventSource.removeEventListener("error", handleStreamError);
-    };
+      socket.on('disconnect', () => {
+        setIsConnected(socket.connected);
+      });
+  
+    }
+
   }, []);
 
   useEffect(() => {
-    // Scroll to the bottom when messages change
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight;
