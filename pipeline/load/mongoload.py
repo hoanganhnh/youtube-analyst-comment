@@ -2,10 +2,9 @@ from kafka import KafkaConsumer
 from pymongo import MongoClient
 import orjson
 import settings
-from pprint import pprint
 import logging
-import sys
 import typer
+
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s',
                     handlers=[
@@ -66,9 +65,9 @@ class MongoLoader:
             json_message=orjson.loads(message)
             message_type=json_message['info_type']
             if message_type=='VIDEO_STATIC_INFO':
-                self.push_to_db(json_message,'info')
+                self.push_to_db(json_message,'infos')
             if message_type=='VIDEO_LIVE_MESSAGE':
-                self.push_to_db(json_message,'live')
+                self.push_to_db(json_message,'lives')
         
     def load(self):
         try:
