@@ -1,5 +1,4 @@
 import * as React from "react";
-import axios from "axios";
 import ReactPlayer from "react-player";
 import Avatar from "react-avatar";
 
@@ -10,16 +9,6 @@ import InputSearchLiveStreamYoutube from "../components/InputSearchLiveStreamYou
 
 const VideoLiveStreamPage = () => {
   const { video, videoDetails } = useViewer();
-
-  // useEffect(() => {
-  //   axios.get(`http://localhost:3000/video/${video}`).then((resp) => {
-  //     const data = resp.data;
-  //     setVideoDetails(data);
-  //   });
-  //   return () => {
-  //     setVideoDetails({});
-  //   };
-  // }, [video]);
 
   return (
     <div className="w-full flex flex-col p-3 bg-gray-800 text-gray-200 h-screen">

@@ -1,24 +1,49 @@
 import * as React from "react";
 import axios from "axios";
 
+import { youtubeParser } from "../utils/getIdVideoYoutube";
+import { useUser } from "../contexts/AuthContext";
+import { useViewer } from "../contexts/ViewerContext";
+import { createHistory } from "../utils/history";
+
 const InputSearchYoutube = () => {
   const [url, setUrl] = React.useState("");
+
+  const { user } = useUser();
+  const { setVideo, setVideoDetails } = useViewer();
 
   const handleSearchLiveStreamVideo = () => {
     if (!url) {
       console.log("require url youtube");
       return;
     }
-    // @TODO
+    const videoId = youtubeParser(url);
     axios
-      .post("http://127.0.0.1:5002/scraper/static-video", {
+      .post(`http://127.0.0.1:5005/api/static-video/${videoId}`, {
         url,
       })
       .then(() => {
-        console.log("send url video stream successful");
+        setVideo(videoId);
+        createHistory({ userId: user._id, videoId });
+
+        axios
+          .post("http://127.0.0.1:5000/api/video/find-info-by-video-id", {
+            videoId,
+          })
+          .then((res) => {
+            setVideoDetails(res.data);
+          });
+        axios
+          .post(`http://127.0.0.1:5005/api/analyst-comment/?url=${url}`)
+          .then((res) => {
+            console.log(res.data);
+          });
       })
-      .catch(() => {
-        console.error("error send url video stream");
+      .catch((e) => {
+        console.error(e);
+      })
+      .finally(() => {
+        setUrl("");
       });
   };
 
@@ -26,6 +51,7 @@ const InputSearchYoutube = () => {
     <div className="flex items-center justify-center">
       <input
         type="text"
+        value={url}
         placeholder="Search"
         onChange={(e) => setUrl(e.target.value)}
         className=" text-gray-800 border rounded-l-xl border-gray-400 h-8  px-4 py-4 focus:outline-none focus:border-blue-600 w-3/5"

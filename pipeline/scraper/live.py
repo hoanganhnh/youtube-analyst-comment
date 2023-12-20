@@ -104,7 +104,6 @@ class LiveTracker:
             video_info=VideoStaticInfo(
                 channel_name=channel_name,
                 channel_url=channel_url,
-                channel_category='',
                 video_id=video_id,
                 video_title=video_title,
                 video_url=video_link,

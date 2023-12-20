@@ -31,7 +31,6 @@ class BaseDataClass:
 class VideoStaticInfo(BaseDataClass):
     channel_name:str
     channel_url:str
-    channel_category:str
     video_id:str
     video_title:str
     video_url:str

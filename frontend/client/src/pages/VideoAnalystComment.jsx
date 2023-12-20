@@ -70,7 +70,10 @@ const ListComment = ({ comments }) => {
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">
+                <div
+                  className="text-sm text-gray-900"
+                  style={{ maxWidth: "36rem", textWrap: "balance" }}
+                >
                   {comment.message_content}
                 </div>
                 <div className="text-sm text-gray-500">
@@ -115,13 +118,14 @@ const VideoAnalystComment = () => {
           }
         );
 
-        console.log(data);
         setComments(data.comments);
         setData({ countNEG: data.countNEG, countPOS: data.countPOS });
       } catch (error) {}
     };
     handleGetAnalystComments();
   }, [videoId]);
+
+  console.log(comments);
 
   return (
     <div className="w-full flex flex-col p-3 bg-gray-800 text-gray-200 h-screen">

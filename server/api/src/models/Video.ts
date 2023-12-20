@@ -3,7 +3,6 @@ import { Schema, model, Document } from "mongoose";
 export interface VideoDocument extends Document {
   channel_name: string;
   channel_url: string;
-  channel_category: string;
   video_id: string;
   video_title: string;
   video_url: string;
@@ -19,9 +18,6 @@ const VideoSchema = new Schema<VideoDocument>(
       type: Schema.Types.String,
     },
     channel_url: {
-      type: Schema.Types.String,
-    },
-    channel_category: {
       type: Schema.Types.String,
     },
     video_id: {

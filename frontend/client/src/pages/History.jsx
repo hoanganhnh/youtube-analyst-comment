@@ -4,16 +4,19 @@ import axios from "axios";
 import Header from "../components/Header";
 import { formatDateToLocalTime } from "../utils/time";
 import { Link } from "react-router-dom";
+import { useUser } from "../contexts/AuthContext";
 
 const ListHistory = () => {
   const [histories, setHistories] = React.useState([]);
+
+  const { user } = useUser();
 
   React.useEffect(() => {
     const handleGetMyHistory = async () => {
       const { data: histories } = await axios.post(
         "http://127.0.0.1:5000/api/history/find-by-user-id",
         {
-          userId: "657dd4a55fd4c450569ac454",
+          userId: user._id,
         }
       );
 

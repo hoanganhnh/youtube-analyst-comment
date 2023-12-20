@@ -52,12 +52,12 @@ class Analyser:
         # self.__start_analyzers()
         # self.profnaity=ProfanityFilter()
         while True:
-            for message in self.recieve_upstream():
+            for message in self.receive_upstream():
                 processed=self.process_message(raw_message=message)
                 if processed:
                     self.send_downstream(processed)
 
-    def recieve_upstream(self):
+    def receive_upstream(self):
         for message in self.consumer:
             raw_message=message.value
             yield raw_message
