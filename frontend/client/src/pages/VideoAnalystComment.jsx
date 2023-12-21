@@ -40,7 +40,16 @@ const ListComment = ({ comments }) => {
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {comments.map((comment) => (
-            <tr key={comment._id}>
+            <tr
+              key={comment._id}
+              className={`${
+                comment.type_comment === "NEG"
+                  ? "bg-red-200"
+                  : comment.type_comment === "POS"
+                  ? "bg-white"
+                  : "bg-blue-200"
+              }`}
+            >
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center">
                   <div className="flex-shrink-0 h-10 w-10">
@@ -82,10 +91,10 @@ const ListComment = ({ comments }) => {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span
-                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 ${
+                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                     comment.type_comment === "POS"
-                      ? "text-green-800"
-                      : "text-red-600"
+                      ? "text-green-800 bg-green-100"
+                      : "text-red-600 bg-gray-50"
                   }`}
                 >
                   {comment.type_comment === "POS" ? "Positive" : "Negative"}
@@ -124,8 +133,6 @@ const VideoAnalystComment = () => {
     };
     handleGetAnalystComments();
   }, [videoId]);
-
-  console.log(comments);
 
   return (
     <div className="w-full flex flex-col p-3 bg-gray-800 text-gray-200 h-screen">

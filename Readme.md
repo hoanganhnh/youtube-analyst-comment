@@ -9,6 +9,8 @@ port = 5000
 port = 5001
 # api web scrapper
 port = 5002
+# api analyst static video
+port = 5005
 # stream server
 port = 3000
 # admin clien
