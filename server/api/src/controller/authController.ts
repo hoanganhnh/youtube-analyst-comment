@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 
 import { Google } from "../lib/google";
-import { User, UserDocument } from "../models/User";
+import { userModel, UserDocument } from "../models/User";
 import { User as UserType, Role } from "../types";
 import { JWT_SECRET_KEY, JWT_EXPIRES_IN } from "../config";
 
@@ -46,13 +46,13 @@ export const loginViaGoogle = async (req: Request, res: Response) => {
     const googleId = response.sub;
     const imageURL = response.picture;
 
-    let user = await User.findOne({
+    let user = await userModel.findOne({
       googleId,
     });
 
     // create user if does not exists in db
     if (!user) {
-      user = await User.create({
+      user = await userModel.create({
         googleId,
         name,
         imageURL,

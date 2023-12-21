@@ -7,6 +7,7 @@ import {
   authRoutes,
   commentRoutes,
   historyRoutes,
+  userRoutes,
   videoRoutes,
 } from "./routes";
 import { PORT } from "./config";
@@ -37,6 +38,7 @@ const start = async () => {
   app.use("/api/history", historyRoutes);
   app.use("/api/video", videoRoutes);
   app.use("/api/comment", commentRoutes);
+  app.use("/api/user", userRoutes);
 
   app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`);

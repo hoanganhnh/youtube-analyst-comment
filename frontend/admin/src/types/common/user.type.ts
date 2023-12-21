@@ -1,17 +1,11 @@
-import type { Article } from './article.type'
-import type { Comment } from './comment.type'
+import { Role } from './role.type'
 
 export type User = {
-  id: number
-  username: string
+  id: string
+  name: string
   email: string
+  imageURL?: string
   password: string
-  bio: string | null
-  image: any | null | string
-  articles: Article[]
-  favorites: Article[]
-  followedBy: User[]
-  following: User[]
-  comments: Comment[]
-  demo: boolean
+  role: Role
+  username: string
 }

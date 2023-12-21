@@ -47,4 +47,12 @@ UserSchema.methods.matchesPassword = function (password: string) {
   return bcrypt.compareSync(password, this.password);
 };
 
-export const User = model<UserDocument>("User", UserSchema);
+UserSchema.set("toJSON", {
+  transform: function (doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  },
+});
+
+export const userModel = model<UserDocument>("User", UserSchema);

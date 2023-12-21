@@ -1,54 +1,43 @@
 // ** React Imports
-import { useEffect, useCallback, useRef, useState, ChangeEvent, ReactNode } from 'react'
+import { ChangeEvent, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 // ** MUI Imports
+import MuiAutocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
-import List from '@mui/material/List'
 import MuiDialog from '@mui/material/Dialog'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, useTheme } from '@mui/material/styles'
-import ListItemButton from '@mui/material/ListItemButton'
-import InputAdornment from '@mui/material/InputAdornment'
-import MuiAutocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 // ** Icons Imports
-import Tab from 'mdi-material-ui/Tab'
-import Close from 'mdi-material-ui/Close'
-import Magnify from 'mdi-material-ui/Magnify'
-import Lastpass from 'mdi-material-ui/Lastpass'
-import ChartDonut from 'mdi-material-ui/ChartDonut'
-import CartOutline from 'mdi-material-ui/CartOutline'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import AccountGroup from 'mdi-material-ui/AccountGroup'
-import CalendarBlank from 'mdi-material-ui/CalendarBlank'
-import CalendarRange from 'mdi-material-ui/CalendarRange'
-import AccountOutline from 'mdi-material-ui/AccountOutline'
-import ViewGridOutline from 'mdi-material-ui/ViewGridOutline'
-import GestureTapButton from 'mdi-material-ui/GestureTapButton'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
-import FileRemoveOutline from 'mdi-material-ui/FileRemoveOutline'
-import FormatListCheckbox from 'mdi-material-ui/FormatListCheckbox'
-import FormatListNumbered from 'mdi-material-ui/FormatListNumbered'
+import AccountGroup from 'mdi-material-ui/AccountGroup'
+import AccountOutline from 'mdi-material-ui/AccountOutline'
+import CartOutline from 'mdi-material-ui/CartOutline'
+import ChartDonut from 'mdi-material-ui/ChartDonut'
 import ChartTimelineVariant from 'mdi-material-ui/ChartTimelineVariant'
+import Close from 'mdi-material-ui/Close'
+import FileRemoveOutline from 'mdi-material-ui/FileRemoveOutline'
+import Magnify from 'mdi-material-ui/Magnify'
 import SubdirectoryArrowLeft from 'mdi-material-ui/SubdirectoryArrowLeft'
-import FormatTextVariantOutline from 'mdi-material-ui/FormatTextVariantOutline'
-import CardBulletedSettingsOutline from 'mdi-material-ui/CardBulletedSettingsOutline'
 
 // ** Third Party Imports
 import axios from 'axios'
 
 // ** Types Imports
-import { AppBarSearchType } from 'src/@fake-db/types'
 import { Settings } from 'src/@core/context/settingsContext'
+import { AppBarSearchType } from 'src/@fake-db/types'
 
 // ** Configs Imports
 import themeConfig from 'src/configs/themeConfig'
@@ -107,88 +96,12 @@ const defaultSuggestionsData: DefaultSuggestionsType[] = [
         icon: <AccountGroup fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
       }
     ]
-  },
-  {
-    category: 'Apps & Pages',
-    suggestions: [
-      {
-        suggestion: 'Calendar',
-        link: '/apps/calendar/',
-        icon: <CalendarBlank fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      },
-      {
-        suggestion: 'Invoice List',
-        link: '/apps/invoice/list/',
-        icon: <FormatListNumbered fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      },
-      {
-        suggestion: 'Pricing',
-        link: '/pages/pricing/',
-        icon: <CurrencyUsd fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      },
-      {
-        suggestion: 'Account Settings',
-        link: '/pages/account-settings/',
-        icon: <AccountCogOutline fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      }
-    ]
-  },
-  {
-    category: 'User Interface',
-    suggestions: [
-      {
-        suggestion: 'Typography',
-        link: '/ui/typography/',
-        icon: <FormatTextVariantOutline fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      },
-      {
-        suggestion: 'Tabs',
-        link: '/components/tabs/',
-        icon: <Tab fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      },
-      {
-        suggestion: 'Buttons',
-        link: '/components/buttons/',
-        icon: <GestureTapButton fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      },
-      {
-        suggestion: 'Advanced Cards',
-        link: '/ui/cards/advanced/',
-        icon: <CardBulletedSettingsOutline fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      }
-    ]
-  },
-  {
-    category: 'Forms & Tables',
-    suggestions: [
-      {
-        suggestion: 'Select',
-        link: '/forms/form-elements/select/',
-        icon: <FormatListCheckbox fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      },
-      {
-        suggestion: 'Autocomplete',
-        link: '/forms/form-elements/autocomplete/',
-        icon: <Lastpass fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      },
-      {
-        suggestion: 'Table',
-        link: '/tables/mui/',
-        icon: <ViewGridOutline fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      },
-      {
-        suggestion: 'Date Pickers',
-        link: '/forms/form-elements/pickers/',
-        icon: <CalendarRange fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
-      }
-    ]
   }
 ]
 
 const categoryTitle: { [k: string]: string } = {
   dashboards: 'Dashboards',
   appsPages: 'Apps & Pages',
-  userInterface: 'User Interface',
   formsTables: 'Forms & Tables',
   chartsMisc: 'Charts & Misc'
 }

@@ -1,114 +1,55 @@
-import { useState, useEffect, MouseEvent, useCallback, ReactElement, Fragment } from 'react'
-import Link from 'next/link'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import Menu from '@mui/material/Menu'
 import Grid from '@mui/material/Grid'
-import { DataGrid } from '@mui/x-data-grid'
-import MenuItem from '@mui/material/MenuItem'
-import { styled } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
-import InputLabel from '@mui/material/InputLabel'
-import FormControl from '@mui/material/FormControl'
-import CardContent from '@mui/material/CardContent'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-
-// ** Icons Imports
-import Laptop from 'mdi-material-ui/Laptop'
-import ChartDonut from 'mdi-material-ui/ChartDonut'
+import { styled } from '@mui/material/styles'
+import { DataGrid, GridColumns } from '@mui/x-data-grid'
+import axios from 'axios'
 import CogOutline from 'mdi-material-ui/CogOutline'
-import EyeOutline from 'mdi-material-ui/EyeOutline'
-import DotsVertical from 'mdi-material-ui/DotsVertical'
-import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
-import AccountOutline from 'mdi-material-ui/AccountOutline'
+import DotsVertical from 'mdi-material-ui/DotsVertical'
+import EyeOutline from 'mdi-material-ui/EyeOutline'
+import Laptop from 'mdi-material-ui/Laptop'
+import Link from 'next/link'
+import { Fragment, MouseEvent, ReactElement, useCallback, useEffect, useState } from 'react'
 
-// ** Store Imports
-import { useDispatch, useSelector } from 'react-redux'
-
-// ** Custom Components Imports
-import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
-
-// ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
-
-// ** Actions Imports
-import { fetchData, deleteUser } from 'src/store/apps/user'
-
-// ** Types Imports
-import { RootState, AppDispatch } from 'src/store'
-import { ThemeColor } from 'src/@core/layouts/types'
-import { UsersType } from 'src/types/apps/userTypes'
-
-// ** Custom Components Imports
+import { User } from 'src/types/common/user.type'
 import TableHeader from 'src/views/apps/user/list/TableHeader'
-import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
 
 interface UserRoleType {
   [key: string]: ReactElement
 }
 
-interface UserStatusType {
-  [key: string]: ThemeColor
-}
-
 // ** Vars
 const userRoleObj: UserRoleType = {
   admin: <Laptop sx={{ mr: 2, color: 'error.main' }} />,
-  author: <CogOutline sx={{ mr: 2, color: 'warning.main' }} />,
-  editor: <PencilOutline sx={{ mr: 2, color: 'info.main' }} />,
-  maintainer: <ChartDonut sx={{ mr: 2, color: 'success.main' }} />,
-  subscriber: <AccountOutline sx={{ mr: 2, color: 'primary.main' }} />
+  user: <CogOutline sx={{ mr: 2, color: 'warning.main' }} />
+
+  // editor: <PencilOutline sx={{ mr: 2, color: 'info.main' }} />,
+  // maintainer: <ChartDonut sx={{ mr: 2, color: 'success.main' }} />,
+  // subscriber: <AccountOutline sx={{ mr: 2, color: 'primary.main' }} />
 }
 
-interface CellType {
-  row: UsersType
-}
-
-const userStatusObj: UserStatusType = {
-  active: 'success',
-  pending: 'warning',
-  inactive: 'secondary'
-}
-
-// ** Styled component for the link for the avatar with image
-const AvatarWithImageLink = styled(Link)(({ theme }) => ({
-  marginRight: theme.spacing(3)
-}))
-
-// ** Styled component for the link for the avatar without image
 const AvatarWithoutImageLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
   marginRight: theme.spacing(3)
 }))
 
-// ** renders client column
-const renderClient = (row: UsersType) => {
-  if (row.avatar.length) {
-    return (
-      <AvatarWithImageLink href={`/apps/user/view/${row.id}`}>
-        <CustomAvatar src={row.avatar} sx={{ mr: 3, width: 34, height: 34 }} />
-      </AvatarWithImageLink>
-    )
-  } else {
-    return (
-      <AvatarWithoutImageLink href={`/apps/user/view/${row.id}`}>
-        <CustomAvatar
-          skin='light'
-          color={row.avatarColor || 'primary'}
-          sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}
-        >
-          {getInitials(row.fullName ? row.fullName : 'John Doe')}
-        </CustomAvatar>
-      </AvatarWithoutImageLink>
-    )
-  }
+const renderClient = (row: User) => {
+  return (
+    <AvatarWithoutImageLink href={`/apps/user/view/${row.id}`}>
+      <CustomAvatar skin='light' color={'primary'} sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}>
+        {getInitials(row.username ? row.username : 'John Doe')}
+      </CustomAvatar>
+    </AvatarWithoutImageLink>
+  )
 }
 
-// ** Styled component for the link inside menu
 const MenuItemLink = styled('a')(({ theme }) => ({
   width: '100%',
   display: 'flex',
@@ -119,10 +60,6 @@ const MenuItemLink = styled('a')(({ theme }) => ({
 }))
 
 const RowOptions = ({ id }: { id: number | string }) => {
-  // ** Hooks
-  const dispatch = useDispatch<AppDispatch>()
-
-  // ** State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const rowOptionsOpen = Boolean(anchorEl)
@@ -135,7 +72,6 @@ const RowOptions = ({ id }: { id: number | string }) => {
   }
 
   const handleDelete = () => {
-    dispatch(deleteUser(id))
     handleRowOptionsClose()
   }
 
@@ -176,32 +112,22 @@ const RowOptions = ({ id }: { id: number | string }) => {
   )
 }
 
-const columns = [
+const columns: GridColumns<User> = [
   {
-    flex: 0.2,
-    minWidth: 230,
-    field: 'fullName',
+    flex: 0.1,
+    minWidth: 200,
+    field: 'username',
     headerName: 'User',
-    renderCell: ({ row }: CellType) => {
-      const { id, fullName, username } = row
+    renderCell: ({ row }) => {
+      const { id, username } = row
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {renderClient(row)}
           <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
             <Link href={`/apps/user/view/${id}`} passHref>
-              <Typography
-                noWrap
-                component='a'
-                variant='subtitle2'
-                sx={{ color: 'text.primary', textDecoration: 'none' }}
-              >
-                {fullName}
-              </Typography>
-            </Link>
-            <Link href={`/apps/user/view/${id}`} passHref>
               <Typography noWrap component='a' variant='caption' sx={{ textDecoration: 'none' }}>
-                @{username}
+                {username}
               </Typography>
             </Link>
           </Box>
@@ -210,11 +136,11 @@ const columns = [
     }
   },
   {
-    flex: 0.2,
+    flex: 0.1,
     minWidth: 250,
     field: 'email',
     headerName: 'Email',
-    renderCell: ({ row }: CellType) => {
+    renderCell: ({ row }) => {
       return (
         <Typography noWrap variant='body2'>
           {row.email}
@@ -223,11 +149,11 @@ const columns = [
     }
   },
   {
-    flex: 0.15,
+    flex: 0.1,
     field: 'role',
     minWidth: 150,
     headerName: 'Role',
-    renderCell: ({ row }: CellType) => {
+    renderCell: ({ row }) => {
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {userRoleObj[row.role]}
@@ -239,133 +165,44 @@ const columns = [
     }
   },
   {
-    flex: 0.15,
-    minWidth: 120,
-    headerName: 'Username',
-    field: 'username',
-    renderCell: ({ row }: CellType) => {
-      return (
-        <Typography variant='subtitle1' noWrap sx={{ textTransform: 'capitalize' }}>
-          {row.username}
-        </Typography>
-      )
-    }
-  },
-  {
     flex: 0.1,
-    minWidth: 110,
-    field: 'status',
-    headerName: 'Status',
-    renderCell: ({ row }: CellType) => {
-      return (
-        <CustomChip
-          skin='light'
-          size='small'
-          label={row.status}
-          color={userStatusObj[row.status]}
-          sx={{ textTransform: 'capitalize', '& .MuiChip-label': { lineHeight: '18px' } }}
-        />
-      )
-    }
-  },
-  {
-    flex: 0.1,
-    minWidth: 90,
+    minWidth: 200,
     sortable: false,
-    field: 'actions',
+    field: '',
     headerName: 'Actions',
-    renderCell: ({ row }: CellType) => <RowOptions id={row.id} />
+    renderCell: ({ row }) => <RowOptions id={row.id} />
   }
 ]
 
-const UserList = () => {
-  // ** State
-  const [role, setRole] = useState<string>('')
-  const [value, setValue] = useState<string>('')
-  const [status, setStatus] = useState<string>('')
-  const [pageSize, setPageSize] = useState<number>(10)
-  const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface UserListProps {}
 
-  // ** Hooks
-  const dispatch = useDispatch<AppDispatch>()
-  const store = useSelector((state: RootState) => state.user)
+const UserList = ({}: UserListProps) => {
+  const [value, setValue] = useState<string>('')
+  const [pageSize, setPageSize] = useState<number>(10)
+
+  const [users, setUsers] = useState<Array<User>>([])
 
   useEffect(() => {
-    dispatch(
-      fetchData({
-        role,
-        status,
-        q: value
-      })
-    )
-  }, [dispatch, role, status, value])
+    const handleGetAllUser = async () => {
+      const { data: users } = await axios.get<User[]>('http://127.0.0.1:5000/api/user/all')
+      setUsers(users)
+    }
+    handleGetAllUser()
+  }, [])
 
   const handleFilter = useCallback((val: string) => {
     setValue(val)
   }, [])
 
-  const handleRoleChange = useCallback((e: SelectChangeEvent) => {
-    setRole(e.target.value)
-  }, [])
-
-  const handleStatusChange = useCallback((e: SelectChangeEvent) => {
-    setStatus(e.target.value)
-  }, [])
-
-  const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
-
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Search Filters' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
-          <CardContent>
-            <Grid container spacing={6}>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='role-select'>Select Role</InputLabel>
-                  <Select
-                    fullWidth
-                    value={role}
-                    id='select-role'
-                    label='Select Role'
-                    labelId='role-select'
-                    onChange={handleRoleChange}
-                    inputProps={{ placeholder: 'Select Role' }}
-                  >
-                    <MenuItem value=''>Select Role</MenuItem>
-                    <MenuItem value='admin'>Admin</MenuItem>
-                    <MenuItem value='author'>Author</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='status-select'>Select Status</InputLabel>
-                  <Select
-                    fullWidth
-                    value={status}
-                    id='select-status'
-                    label='Select Status'
-                    labelId='status-select'
-                    onChange={handleStatusChange}
-                    inputProps={{ placeholder: 'Select Status' }}
-                  >
-                    <MenuItem value='active'>Active</MenuItem>
-                    <MenuItem value='inactive'>Inactive</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={12}>
-        <Card>
-          <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
+          <TableHeader value={value} handleFilter={handleFilter} />
           <DataGrid
             autoHeight
-            rows={store.data}
+            rows={users}
             columns={columns}
             checkboxSelection
             pageSize={pageSize}
@@ -376,8 +213,6 @@ const UserList = () => {
           />
         </Card>
       </Grid>
-
-      <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />
     </Grid>
   )
 }

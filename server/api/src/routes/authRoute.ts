@@ -1,7 +1,6 @@
 import { Router } from "express";
 
 import * as authController from "../controller/authController";
-import { protect } from "../middleware/guardAuth";
 import { loginValidation, signUpValidation, validate } from "../validation";
 
 const authRouter = Router();

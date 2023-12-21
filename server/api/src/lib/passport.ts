@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as localStrategy } from "passport-local";
 import { Strategy as JWTstrategy, ExtractJwt } from "passport-jwt";
-import { User } from "../models/User";
+import { userModel } from "../models/User";
 import { Role } from "../types";
 import { JWT_SECRET_KEY } from "../config";
 
@@ -15,7 +15,7 @@ passport.use(
     async (token, done) => {
       try {
         const { user_id } = token;
-        const user = await User.findById(user_id);
+        const user = await userModel.findById(user_id);
         if (!user) return done(null, false, "User not found");
         //Pass the user details to the next middleware
         return done(null, user);
@@ -38,12 +38,12 @@ passport.use(
       try {
         const { username } = req.body;
 
-        let user = await User.findOne({ email: email.toLowerCase() });
+        let user = await userModel.findOne({ email: email.toLowerCase() });
 
         if (user)
           return done(null, false, { message: "Email is already taken" });
 
-        user = await User.create({
+        user = await userModel.create({
           email,
           password,
           username,
@@ -67,7 +67,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await User.findOne({ email });
+        const user = await userModel.findOne({ email });
         if (!user) {
           return done(null, false, {
             message: "Email or Password is incorrect",
