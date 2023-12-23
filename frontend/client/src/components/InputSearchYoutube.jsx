@@ -24,7 +24,7 @@ const InputSearchYoutube = () => {
       })
       .then(() => {
         setVideo(videoId);
-        createHistory({ userId: user._id, videoId });
+        createHistory({ userId: user.id, videoId });
 
         axios
           .post("http://127.0.0.1:5000/api/video/find-info-by-video-id", {

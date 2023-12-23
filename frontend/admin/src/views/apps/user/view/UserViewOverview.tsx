@@ -20,8 +20,6 @@ interface UserViewOverviewProps {
 }
 
 const UserViewOverview = ({ histories }: UserViewOverviewProps) => {
-  console.log(histories)
-
   return (
     <Fragment>
       <Card sx={{ mb: 6 }}>

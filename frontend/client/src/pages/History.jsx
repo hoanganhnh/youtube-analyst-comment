@@ -16,7 +16,7 @@ const ListHistory = () => {
       const { data: histories } = await axios.post(
         "http://127.0.0.1:5000/api/history/find-by-user-id",
         {
-          userId: user._id,
+          userId: user.id,
         }
       );
 

@@ -54,7 +54,7 @@ liveCollectionChangeStream.on("change", (change) => {
   }
 });
 
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 
 server.listen(PORT, () => {
   console.log(`server listening on *:${PORT}`);
