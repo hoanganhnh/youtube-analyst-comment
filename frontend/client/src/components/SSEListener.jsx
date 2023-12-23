@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 
 import VideoMessage from "./VideoMessage";
 import { useSocket } from "../contexts/SocketContext";
+import { useViewer } from "../contexts/ViewerContext";
 
 const SSEListener = () => {
   const [messages, setMessages] = useState([]);
   const messagesContainerRef = useRef(null);
 
+  const { setVideo, setVideoDetails } = useViewer();
   const { socket } = useSocket();
 
   React.useEffect(() => {
@@ -19,6 +21,11 @@ const SSEListener = () => {
         });
       });
     }
+
+    return () => {
+      setVideo(null);
+      setVideoDetails({});
+    };
   }, [socket.current]);
   useEffect(() => {
     if (messagesContainerRef.current) {

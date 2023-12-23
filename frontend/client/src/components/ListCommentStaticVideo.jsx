@@ -3,11 +3,13 @@ import Avatar from "react-avatar";
 
 import { formatDateToLocalTime } from "../utils/time";
 import { useSocket } from "../contexts/SocketContext";
+import { useViewer } from "../contexts/ViewerContext";
 
 const ListCommentStaticVideo = () => {
   const [messages, setMessages] = React.useState([]);
   const messagesContainerRef = React.useRef(null);
   const { socket } = useSocket();
+  const { setVideo, setVideoDetails } = useViewer();
 
   React.useEffect(() => {
     if (socket.current) {
@@ -18,6 +20,11 @@ const ListCommentStaticVideo = () => {
         });
       });
     }
+
+    return () => {
+      setVideo(null);
+      setVideoDetails({});
+    };
   }, [socket.current]);
 
   return (
