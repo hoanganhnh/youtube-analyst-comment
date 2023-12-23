@@ -42,7 +42,7 @@ const AvatarWithoutImageLink = styled(Link)(({ theme }) => ({
 
 const renderClient = (row: User) => {
   return (
-    <AvatarWithoutImageLink href={`/apps/user/view/${row.id}`}>
+    <AvatarWithoutImageLink href={`/apps/user/${row.id}`}>
       <CustomAvatar skin='light' color={'primary'} sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}>
         {getInitials(row.username ? row.username : 'John Doe')}
       </CustomAvatar>
@@ -96,7 +96,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
         PaperProps={{ style: { minWidth: '8rem' } }}
       >
         <MenuItem sx={{ p: 0 }}>
-          <Link href={`/apps/user/view/${id}`} passHref>
+          <Link href={`/apps/user/${id}`} passHref>
             <MenuItemLink>
               <EyeOutline fontSize='small' sx={{ mr: 2 }} />
               View
@@ -125,7 +125,7 @@ const columns: GridColumns<User> = [
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {renderClient(row)}
           <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-            <Link href={`/apps/user/view/${id}`} passHref>
+            <Link href={`/apps/user/${id}`} passHref>
               <Typography noWrap component='a' variant='caption' sx={{ textDecoration: 'none' }}>
                 {username}
               </Typography>

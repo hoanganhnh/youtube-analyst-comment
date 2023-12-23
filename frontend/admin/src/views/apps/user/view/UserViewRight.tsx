@@ -22,11 +22,9 @@ import UserViewOverview from 'src/views/apps/user/view/UserViewOverview'
 import UserViewSecurity from 'src/views/apps/user/view/UserViewSecurity'
 import UserViewConnection from 'src/views/apps/user/view/UserViewConnection'
 import UserViewNotification from 'src/views/apps/user/view/UserViewNotification'
-import { Article } from 'src/types/common/article.type'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface UserViewRightProps {
-  articles: Article[]
+  histories: Array<any>
 }
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
@@ -38,8 +36,8 @@ const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   }
 }))
 
-const UserViewRight = ({ articles }: UserViewRightProps) => {
-  const [value, setValue] = useState<string>('overview')
+const UserViewRight = ({ histories }: UserViewRightProps) => {
+  const [value, setValue] = useState<string>('video')
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
@@ -54,16 +52,17 @@ const UserViewRight = ({ articles }: UserViewRightProps) => {
         aria-label='forced scroll tabs example'
         sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
       >
-        <Tab value='overview' label='Overview' icon={<AccountOutline sx={{ fontSize: '18px' }} />} />
+        <Tab value='video' label='Videos' icon={<AccountOutline sx={{ fontSize: '18px' }} />} />
         <Tab value='security' label='Security' icon={<LockOutline sx={{ fontSize: '18px' }} />} />
         <Tab value='billing-plan' label='Billing & Plan' icon={<BookmarkOutline sx={{ fontSize: '18px' }} />} />
         <Tab value='notification' label='Notification' icon={<BellOutline sx={{ fontSize: '18px' }} />} />
         <Tab value='connection' label='Connection' icon={<LinkVariant sx={{ fontSize: '18px' }} />} />
       </TabList>
       <Box sx={{ mt: 3 }}>
-        <TabPanel sx={{ p: 0 }} value='overview'>
-          <UserViewOverview articles={articles} />
+        <TabPanel sx={{ p: 0 }} value='video'>
+          <UserViewOverview histories={histories} />
         </TabPanel>
+
         <TabPanel sx={{ p: 0 }} value='security'>
           <UserViewSecurity />
         </TabPanel>

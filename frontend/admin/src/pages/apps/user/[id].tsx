@@ -1,37 +1,15 @@
-import React from 'react'
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType } from 'next/types'
-import axios from 'axios'
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next/types'
 
-import type { InvoiceType } from 'src/types/apps/invoiceTypes'
 import UserViewPage from 'src/views/apps/user/view/UserViewPage'
-import { findPostsById } from 'src/@fake-db/apps/post'
 
-const UserView = ({ id, posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  return <UserViewPage id={id} articles={posts} />
+const UserView = ({ id }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  return <UserViewPage id={id} />
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await axios.get('/apps/users/list')
-  const userDate: InvoiceType[] = await res.data.allData
-
-  const paths = userDate.map((item: InvoiceType) => ({
-    params: { id: `${item.id}` }
-  }))
-
-  return {
-    paths,
-    fallback: false
-  }
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsContext) => {
-  const userId = Number(params?.id)
-  const posts = findPostsById(userId)
-
+export const getServerSideProps: GetServerSideProps = async ({ params }: GetServerSidePropsContext) => {
   return {
     props: {
-      id: params?.id,
-      posts
+      id: params?.id
     }
   }
 }

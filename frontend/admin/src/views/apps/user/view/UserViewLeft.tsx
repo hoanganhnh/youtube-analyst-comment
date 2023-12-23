@@ -22,16 +22,16 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
 import Check from 'mdi-material-ui/Check'
-import StarOutline from 'mdi-material-ui/StarOutline'
 
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import CustomChip from 'src/@core/components/mui/chip'
-import { getInitials } from 'src/@core/utils/get-initials'
 import type { ThemeColor } from 'src/@core/layouts/types'
-import type { UsersType } from 'src/types/apps/userTypes'
+import { getInitials } from 'src/@core/utils/get-initials'
+import { User } from 'src/types/common/user.type'
 
 interface UserViewLeftProps {
-  data: UsersType
+  data: User
+  histories: Array<any>
 }
 
 interface ColorsType {
@@ -46,37 +46,24 @@ const roleColors: ColorsType = {
   subscriber: 'primary'
 }
 
-const statusColors: ColorsType = {
-  active: 'success',
-  pending: 'warning',
-  inactive: 'secondary'
-}
-
-const UserViewLeft = ({ data }: UserViewLeftProps) => {
+const UserViewLeft = ({ data, histories }: UserViewLeftProps) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false)
 
-  // Handle Edit dialog
   const handleEditClickOpen = () => setOpenEdit(true)
   const handleEditClose = () => setOpenEdit(false)
 
   const renderUserAvatar = () => {
     if (data) {
-      if (data.avatar.length) {
-        return (
-          <CustomAvatar alt='User Image' src={data.avatar} variant='rounded' sx={{ width: 120, height: 120, mb: 4 }} />
-        )
-      } else {
-        return (
-          <CustomAvatar
-            skin='light'
-            variant='rounded'
-            color={data.avatarColor as ThemeColor}
-            sx={{ width: 120, height: 120, fontWeight: 600, mb: 4, fontSize: '3rem' }}
-          >
-            {getInitials(data.username)}
-          </CustomAvatar>
-        )
-      }
+      return (
+        <CustomAvatar
+          skin='light'
+          variant='rounded'
+          color={'primary'}
+          sx={{ width: 120, height: 120, fontWeight: 600, mb: 4, fontSize: '3rem' }}
+        >
+          {getInitials(data.username)}
+        </CustomAvatar>
+      )
     } else {
       return null
     }
@@ -112,22 +99,11 @@ const UserViewLeft = ({ data }: UserViewLeftProps) => {
                   <CustomAvatar skin='light' variant='rounded' sx={{ mr: 4, width: 44, height: 44 }}>
                     <Check />
                   </CustomAvatar>
-                  <Box>
+                  <Box display='flex' alignItems='center'>
                     <Typography variant='h5' sx={{ lineHeight: 1.3 }}>
-                      1.23k
+                      {histories.length}
                     </Typography>
-                    <Typography variant='body2'>Posts</Typography>
-                  </Box>
-                </Stack>
-                <Stack direction='row' alignItems='center'>
-                  <CustomAvatar skin='light' variant='rounded' sx={{ mr: 4, width: 44, height: 44 }}>
-                    <StarOutline />
-                  </CustomAvatar>
-                  <Box>
-                    <Typography variant='h5' sx={{ lineHeight: 1.3 }}>
-                      568
-                    </Typography>
-                    <Typography variant='body2'>Followers</Typography>
+                    <Typography variant='body2'>Videos</Typography>
                   </Box>
                 </Stack>
               </Stack>
@@ -148,24 +124,6 @@ const UserViewLeft = ({ data }: UserViewLeftProps) => {
                     Email:
                   </Typography>
                   <Typography variant='body2'>{data.email}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', mb: 2.7 }}>
-                  <Typography variant='subtitle2' sx={{ mr: 2, color: 'text.primary' }}>
-                    Status:
-                  </Typography>
-                  <CustomChip
-                    skin='light'
-                    size='small'
-                    label={data.status}
-                    color={statusColors[data.status]}
-                    sx={{
-                      height: 20,
-                      fontSize: '0.75rem',
-                      fontWeight: 500,
-                      borderRadius: '5px',
-                      textTransform: 'capitalize'
-                    }}
-                  />
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2.7 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Role:</Typography>
@@ -213,41 +171,9 @@ const UserViewLeft = ({ data }: UserViewLeftProps) => {
                     <Grid item xs={12} sm={6}>
                       <TextField fullWidth type='email' label='Billing Email' defaultValue={data.email} />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth>
-                        <InputLabel id='user-view-status-label'>Status</InputLabel>
-                        <Select
-                          label='Status'
-                          defaultValue={data.status}
-                          id='user-view-status'
-                          labelId='user-view-status-label'
-                        >
-                          <MenuItem value='pending'>Pending</MenuItem>
-                          <MenuItem value='active'>Active</MenuItem>
-                          <MenuItem value='inactive'>Inactive</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Grid>
+
                     <Grid item xs={12} sm={6}>
                       <TextField fullWidth label='TAX ID' defaultValue='Tax-8894' />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Bio' defaultValue={data.bio} />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth>
-                        <InputLabel id='user-view-language-label'>Language</InputLabel>
-                        <Select
-                          label='Language'
-                          defaultValue='English'
-                          id='user-view-language'
-                          labelId='user-view-language-label'
-                        >
-                          <MenuItem value='English'>English</MenuItem>
-                          <MenuItem value='German'>German</MenuItem>
-                          <MenuItem value='VietNam'>VietNam</MenuItem>
-                        </Select>
-                      </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <FormControl fullWidth>
