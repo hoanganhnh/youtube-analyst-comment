@@ -106,7 +106,7 @@ const ListHistory = () => {
 
 const HistoryPage = () => {
   return (
-    <div className="w-full flex flex-col p-3 bg-gray-800 text-gray-200 h-screen">
+    <div className="w-full flex flex-col p-3 bg-gray-800 text-gray-200">
       <Header />
       <div className="flex mt-12">
         <div className="max-w-5xl m-auto">

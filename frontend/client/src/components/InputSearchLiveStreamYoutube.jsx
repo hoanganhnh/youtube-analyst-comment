@@ -18,13 +18,13 @@ const InputSearchLiveStreamYoutube = () => {
       console.log("require url youtube");
       return;
     }
+    const videoId = youtubeParser(url);
     axios
       .post("http://127.0.0.1:5002/api/scraper", {
         url,
       })
       .then(() => {
         console.log("send url video stream successful");
-        const videoId = youtubeParser(url);
         setVideo(videoId);
         createHistory({ userId: user.id, videoId });
 

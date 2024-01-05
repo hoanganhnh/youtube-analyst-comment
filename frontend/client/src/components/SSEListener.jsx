@@ -27,12 +27,12 @@ const SSEListener = () => {
       setVideoDetails({});
     };
   }, [socket.current]);
-  useEffect(() => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop =
-        messagesContainerRef.current.scrollHeight;
-    }
-  }, [messages]);
+  // useEffect(() => {
+  //   if (messagesContainerRef.current) {
+  //     messagesContainerRef.current.scrollTop =
+  //       messagesContainerRef.current.scrollHeight;
+  //   }
+  // }, [messages]);
 
   return (
     <div ref={messagesContainerRef} className="h-full overflow-y-auto py-10">
